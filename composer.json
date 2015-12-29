@@ -1,0 +1,21 @@
+{
+    "name": "petaak/workdays",
+    "type": "library",
+    "keywords": ["workdays"],
+    "license": ["MIT"],
+    "authors": [
+        {
+            "name": "Petr Vácha",
+            "email": "p.e.t.r.vacha@seznam.cz"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "nette/tester": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Petaak\\Workdays\\": "src/Workdays/"
+        }
+    }
+}
