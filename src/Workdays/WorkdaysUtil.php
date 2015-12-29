@@ -50,7 +50,8 @@ class WorkdaysUtil
         if ($date === null) {
             $date = new DateTime();
         }
-        return !empty($this->holidaysBetween($date, $date, $countryCode));
+        $holidaysBetween = $this->holidaysBetween($date, $date, $countryCode);
+        return !empty($holidaysBetween);
     }
 
     /**
