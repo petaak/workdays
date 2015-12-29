@@ -16,6 +16,11 @@ require __DIR__ . '/../../bootstrap.php';
 class CzeTest extends TestCase
 {
 
+    public function __construct()
+    {
+        date_default_timezone_set('Europe/Prague');
+    }
+
     public function testGetByYear()
     {
         $provider = new Cze();

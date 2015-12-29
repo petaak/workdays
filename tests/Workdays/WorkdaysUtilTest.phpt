@@ -19,6 +19,11 @@ require __DIR__ . '/../bootstrap.php';
 class WorkdaysUtilTest extends TestCase
 {
 
+    public function __construct()
+    {
+        date_default_timezone_set('Europe/Prague');
+    }
+
     /**
      *
      * @param string $countryCode
