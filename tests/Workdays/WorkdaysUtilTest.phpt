@@ -1,6 +1,6 @@
 <?php
 
-namespace Petaak\Workdays\Tests\HolidayProvider;
+namespace Petaak\Workdays\Tests;
 
 use DateTime;
 use Petaak\Workdays\WorkdaysUtil;
@@ -22,6 +22,16 @@ class WorkdaysUtilTest extends TestCase
     public function __construct()
     {
         date_default_timezone_set('Europe/Prague');
+    }
+
+    /**
+     *
+     */
+    public function testConstructThrowsException()
+    {
+        Assert::exception(function() {
+            new WorkdaysUtil('FOO');
+        }, 'InvalidArgumentException', 'HolidayProvider for coutry FOO not implemented.');
     }
 
     /**
@@ -114,6 +124,19 @@ class WorkdaysUtilTest extends TestCase
         Assert::equal(new DateTime('2015-12-16'), $date);
         $util->subWorkdays($date, 4);
         Assert::equal(new DateTime('2015-12-10'), $date);
+    }
+
+    /**
+     *
+     */
+    public function testChooseCorrectProvider()
+    {
+        $util = new WorkdaysUtil('SVK');
+        $date = new DateTime('2016-09-28');
+        Assert::true($util->isHoliday($date, 'CZE'));
+        Assert::false($util->isHoliday($date));
+        Assert::false($util->isWorkday($date, 'CZE'));
+        Assert::true($util->isWorkday($date));
     }
 
     /**
