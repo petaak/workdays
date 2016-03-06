@@ -4,6 +4,7 @@ namespace Petaak\Workdays;
 
 use DateInterval;
 use DateTime;
+use Exception;
 use InvalidArgumentException;
 use Petaak\Workdays\HolidaysProvider\IHolidaysProvider;
 
@@ -17,6 +18,9 @@ class WorkdaysUtil
 
     /** @var IHolidaysProvider */
     private $holidaysProvider;
+
+    /** @staticvar int Limit for the getNextHoliday function */
+    const MAX_YEARS_WITH_NO_HOLIDAY = 100;
 
     public function __construct($countryCode = 'CZE')
     {
@@ -79,14 +83,16 @@ class WorkdaysUtil
         $dateFrom = clone $date;
         $dateFrom->modify('+1 DAY');
         $dateTo = clone $date;
-        $dateTo->modify('+ 1 YEAR');
-        $followingHolidays = $this->holidaysBetween($dateFrom, $dateTo, $countryCode);
-        if (count($followingHolidays) > 0) {
-            $sorted = $this->sortHolidays($followingHolidays);
-            return reset($sorted);
-        } else {
-            throw new Exception('No holiday in the following 1 year.');
+        for ($i = 0; $i < self::MAX_YEARS_WITH_NO_HOLIDAY; $i++) {
+            $dateTo->modify('+ 1 YEAR');
+            echo $dateTo->format('Y-m-d H:i:s').PHP_EOL;
+            $followingHolidays = $this->holidaysBetween($dateFrom, $dateTo, $countryCode);
+            if (count($followingHolidays) > 0) {
+                $sorted = $this->sortHolidays($followingHolidays);
+                return reset($sorted);
+            }
         }
+        throw new Exception('No holiday in the following ' . self::MAX_YEARS_WITH_NO_HOLIDAY . ' years.');
     }
 
     /**

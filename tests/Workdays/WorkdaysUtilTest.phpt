@@ -8,6 +8,8 @@ use Tester\Assert;
 use Tester\TestCase;
 
 require __DIR__ . '/../bootstrap.php';
+require __DIR__ . '/../src/PoorCountryWithNoHolidays.php';
+require __DIR__ . '/../src/PoorCountryWithFewHolidays.php';
 
 /**
  * Description of WorkdaysUtilTest
@@ -139,6 +141,15 @@ class WorkdaysUtilTest extends TestCase
         Assert::true($util->isWorkday($date));
     }
 
+    public function testGetNextHolidayThrowsException()
+    {
+
+        Assert::exception(function() {
+            $util = new WorkdaysUtil('PoorCountryWithNoHolidays');
+            $util->getNextHoliday();
+        }, 'Exception', 'No holiday in the following 100 years.');
+    }
+
     /**
      *
      * @return array
@@ -154,6 +165,10 @@ class WorkdaysUtilTest extends TestCase
         ];
         $nextHolidays['SVK'] = [
             ['2013-01-27', '2013-03-29'],
+        ];
+        $nextHolidays['PoorCountryWithFewHolidays'] = [
+            ['2013-01-27', '2020-12-24'],
+            ['2021-01-27', '2030-12-24'],
         ];
         foreach ($nextHolidays as $countryCode => $dates) {
             foreach ($dates as $pair) {
