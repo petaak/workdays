@@ -10,7 +10,8 @@
         }
     ],
     "require": {
-        "php": ">= 5.4.0"
+        "php": ">= 5.4.0",
+        "ext-calendar": "*"
     },
     "require-dev": {
         "nette/tester": "^1.6"
