@@ -39,7 +39,7 @@ class WorkdaysUtil
             $date = new DateTime();
         }
         $isHoliday = $this->isHoliday($date, $countryCode);
-        $isWeekend = $this->isWeekend($date, $countryCode);
+        $isWeekend = $this->isWeekend($date);
         return !$isWeekend && !$isHoliday;
     }
 
