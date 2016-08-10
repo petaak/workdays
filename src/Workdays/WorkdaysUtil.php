@@ -66,6 +66,9 @@ class WorkdaysUtil
      */
     public function getNextWorkday(DateTime $date = null, $countryCode = null)
     {
+        if ($date === null) {
+            $date = new DateTime();
+        }
         return $this->addWorkdays(clone $date, 1, $countryCode);
     }
 
