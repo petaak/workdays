@@ -88,7 +88,6 @@ class WorkdaysUtil
         $dateTo = clone $date;
         for ($i = 0; $i < self::MAX_YEARS_WITH_NO_HOLIDAY; $i++) {
             $dateTo->modify('+ 1 YEAR');
-            echo $dateTo->format('Y-m-d H:i:s').PHP_EOL;
             $followingHolidays = $this->holidaysBetween($dateFrom, $dateTo, $countryCode);
             if (count($followingHolidays) > 0) {
                 $sorted = $this->sortHolidays($followingHolidays);
