@@ -19,7 +19,7 @@ class WorkdaysUtil
     /** @var IHolidaysProvider */
     private $holidaysProvider;
 
-    /** @staticvar int Limit for the getNextHoliday function */
+    /** @const int Limit for the getNextHoliday function */
     const MAX_YEARS_WITH_NO_HOLIDAY = 100;
 
     public function __construct($countryCode = 'CZE')
@@ -61,7 +61,7 @@ class WorkdaysUtil
     /**
      *
      * @param DateTime $date
-     * @param type $countryCode
+     * @param string|null $countryCode
      * @return DateTime
      */
     public function getNextWorkday(DateTime $date = null, $countryCode = null)
@@ -73,8 +73,8 @@ class WorkdaysUtil
     }
 
     /**
-     *
-     * @param DateTime $date
+     * @param DateTime|null $date
+     * @param string|null $countryCode
      * @return Holiday
      * @throws Exception
      */
@@ -98,12 +98,12 @@ class WorkdaysUtil
     }
 
     /**
-     *
      * @param DateTime $date
      * @param int $numberOfWorkdays
+     * @param string|null $countryCode
      * @return DateTime
      */
-    public function addWorkdays(\DateTime $date, $numberOfWorkdays, $countryCode = null)
+    public function addWorkdays(DateTime $date, $numberOfWorkdays, $countryCode = null)
     {
         $interval = new DateInterval('P1D');
         $days = 0;
@@ -121,12 +121,12 @@ class WorkdaysUtil
     }
 
     /**
-     *
      * @param DateTime $date
      * @param int $numberOfWorkdays
+     * @param string|null $countryCode
      * @return DateTime
      */
-    public function subWorkdays(\DateTime $date, $numberOfWorkdays, $countryCode = null)
+    public function subWorkdays(DateTime $date, $numberOfWorkdays, $countryCode = null)
     {
         return $this->addWorkdays($date, -$numberOfWorkdays, $countryCode);
     }
@@ -161,7 +161,7 @@ class WorkdaysUtil
             $holidaysInYear = $this->getHolidaysByYear($year, $countryCode);
             $holidays = array_merge($holidays, $holidaysInYear);
         }
-        $holidaysBetween = array_filter($holidays, function ($holiday) use ($cloneFrom, $cloneTo) {
+        $holidaysBetween = array_filter($holidays, function (Holiday $holiday) use ($cloneFrom, $cloneTo) {
             $date = $holiday->getDate();
             return $date >= $cloneFrom && $date <= $cloneTo;
         });
@@ -191,14 +191,14 @@ class WorkdaysUtil
      */
     private function sortHolidays($holidays)
     {
-        usort($holidays, function ($first, $second) {
+        usort($holidays, function (Holiday $first,Holiday $second) {
             if ($first->getDate() < $second->getDate()) {
                 return -1;
             } elseif ($first->getDate() > $second->getDate()) {
                 return 1;
             } else {
                 return 0;
-            };
+            }
         });
         return $holidays;
     }
@@ -225,7 +225,7 @@ class WorkdaysUtil
         if (class_exists($className)) {
             return new $className;
         } else {
-            throw new InvalidArgumentException('HolidayProvider for coutry ' . $countryCode . ' not implemented.');
+            throw new InvalidArgumentException('HolidayProvider for country ' . $countryCode . ' not implemented.');
         }
     }
 }

@@ -33,7 +33,7 @@ class WorkdaysUtilTest extends TestCase
     {
         Assert::exception(function() {
             new WorkdaysUtil('FOO');
-        }, 'InvalidArgumentException', 'HolidayProvider for coutry FOO not implemented.');
+        }, 'InvalidArgumentException', 'HolidayProvider for country FOO not implemented.');
     }
 
     /**

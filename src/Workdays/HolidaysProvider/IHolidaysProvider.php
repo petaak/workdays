@@ -2,6 +2,8 @@
 
 namespace Petaak\Workdays\HolidaysProvider;
 
+use Petaak\Workdays\Holiday;
+
 /**
  *
  * @author Petr Vácha <petr.vacha@ulozenka.cz>
