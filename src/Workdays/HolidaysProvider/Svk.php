@@ -29,7 +29,7 @@ class Svk extends BaseHolidaysProvider implements IHolidaysProvider
         $holidays[] = new Holiday(new DateTime($year . '-05-01'), 'Sviatok práce');
         $holidays[] = new Holiday(new DateTime($year . '-05-08'), 'Deň víťazstva nad fašizmom');
         $holidays[] = new Holiday(new DateTime($year . '-07-05'), 'Sviatok svätého Cyrila a svätého Metoda');
-        $holidays[] = new Holiday(new DateTime($year . '-08-26'), 'Výročie Slovenského národného povstania');
+        $holidays[] = new Holiday(new DateTime($year . '-08-29'), 'Výročie Slovenského národného povstania');
         $holidays[] = new Holiday(new DateTime($year . '-09-01'), 'Deň Ústavy Slovenskej republiky');
         $holidays[] = new Holiday(new DateTime($year . '-09-15'), 'Sedembolestná Panna Mária');
         $holidays[] = new Holiday(new DateTime($year . '-11-01'), 'Sviatok Všetkých svätých');
