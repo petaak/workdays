@@ -58,3 +58,18 @@ echo $datetime->format('Y-m-d H:i:s') . PHP_EOL;
 // 2016-01-08 12:43:28
 
 ```
+
+### Custom Holiday Providers
+```php
+class CustomHolidaysProvider implements Petaak\Workdays\HolidaysProvider\IHolidaysProvider
+{
+    // ...
+}
+
+// initialize workdays util without country code; the correct holidays provider is not yet available
+$workdaysUtil = new Petaak\Workdays\WorkdaysUtil();
+$workdaysUtil->registerHolidaysProvider(new CustomHolidaysProvider(), 'ZZ');
+// set the default country once the holidays provider is registered
+$workdaysUtil->setCountry('ZZ');
+
+```
