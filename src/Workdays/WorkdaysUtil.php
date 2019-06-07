@@ -19,12 +19,35 @@ class WorkdaysUtil
     /** @var IHolidaysProvider */
     private $holidaysProvider;
 
+    /**
+     * @var IHolidaysProvider[]
+     */
+    private $holidayProviderRegistry = array();
+
     /** @const int Limit for the getNextHoliday function */
     const MAX_YEARS_WITH_NO_HOLIDAY = 100;
 
     public function __construct($countryCode = 'CZE')
     {
         $this->setCountry($countryCode);
+    }
+
+    /**
+     *
+     * @param string $countryCode
+     */
+    public function setCountry($countryCode = null)
+    {
+        $this->holidaysProvider = $this->getHolidaysProviderByCountryCode($countryCode);
+    }
+
+    /**
+     * @param IHolidaysProvider $holidayProvider
+     * @param string $countryCode
+     */
+    public function registerHolidaysProvider(IHolidaysProvider $holidayProvider, $countryCode)
+    {
+        $this->holidayProviderRegistry[$countryCode] = $holidayProvider;
     }
 
     /**
@@ -206,20 +229,14 @@ class WorkdaysUtil
     /**
      *
      * @param string $countryCode
-     */
-    private function setCountry($countryCode = null)
-    {
-        $this->holidaysProvider = $this->getHolidaysProviderByCountryCode($countryCode);
-    }
-
-    /**
-     *
-     * @param string $countryCode
      * @return IHolidaysProvider
      * @throws InvalidArgumentException
      */
     private function getHolidaysProviderByCountryCode($countryCode)
     {
+        if (array_key_exists($countryCode, $this->holidayProviderRegistry)) {
+            return $this->holidayProviderRegistry[$countryCode];
+        }
         $providerNamespace = '\\Petaak\\Workdays\\HolidaysProvider\\';
         $className = $providerNamespace . ucfirst(strtolower($countryCode));
         if (class_exists($className)) {

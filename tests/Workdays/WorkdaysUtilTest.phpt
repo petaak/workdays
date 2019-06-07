@@ -10,6 +10,7 @@ use Tester\TestCase;
 require __DIR__ . '/../bootstrap.php';
 require __DIR__ . '/../src/PoorCountryWithNoHolidays.php';
 require __DIR__ . '/../src/PoorCountryWithFewHolidays.php';
+require __DIR__ . '/../src/CustomHolidaysProvider.php';
 
 /**
  * Description of WorkdaysUtilTest
@@ -285,6 +286,14 @@ class WorkdaysUtilTest extends TestCase
             }
         }
         return $data;
+    }
+
+    public function testCustomProvider()
+    {
+        $util = new WorkdaysUtil();
+        $util->registerHolidaysProvider(new \Acme\Demo\HolidaysProvider\CustomHolidaysProvider(), 'DE');
+        $util->setCountry('DE');
+        Assert::false($util->isWorkday(new DateTime('2019-10-03')));
     }
 }
 
