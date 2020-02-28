@@ -57,6 +57,12 @@ $workdaysUtil->subWorkdays($datetime, 4, 'SVK');
 echo $datetime->format('Y-m-d H:i:s') . PHP_EOL;
 // 2016-01-08 12:43:28
 
+$dateFrom = new DateTime('2019-12-20');
+$dateTo = new DateTime('2020-01-10');
+$workdaysUtil->findWorkdaysByDateInterval($dateFrom, $dateTo, Petaak\Workdays\HolidaysProvider\Cze::PROVIDER_COUNTRY_CODE);
+// Array of DateTime
+// [2019-12-20, 2019-12-23, 2019-12-27, 2019-12-30, 2019-12-31, 2020-01-02, 2020-01-03, 2020-01-06, 2020-01-07, 2020-01-08, 2020-01-09, 2020-01-10] 
+
 ```
 
 ### Custom Holiday Providers

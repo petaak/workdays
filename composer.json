@@ -1,6 +1,7 @@
 {
     "name": "petaak/workdays",
     "type": "library",
+    "description": "Library for working with holidays and workdays.",
     "keywords": ["workdays"],
     "license": ["MIT"],
     "authors": [

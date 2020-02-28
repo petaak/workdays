@@ -245,4 +245,25 @@ class WorkdaysUtil
             throw new InvalidArgumentException('HolidayProvider for country ' . $countryCode . ' not implemented.');
         }
     }
+
+    /**
+     * @param DateTime $dateFrom
+     * @param DateTime $dateTo
+     * @param string|null $countryCode
+     * @return array
+     */
+    public function findWorkdaysByDateInterval(
+        DateTime $dateFrom,
+        DateTime $dateTo,
+        $countryCode = null
+    ) {
+        $workDays = [];
+        while ($dateFrom <= $dateTo) {
+            if ($this->isWorkday($dateFrom, $countryCode)) {
+                $workDays[] = clone $dateFrom;
+            }
+            $dateFrom = $this->getNextWorkday($dateFrom, $countryCode);
+        }
+        return $workDays;
+    }
 }
