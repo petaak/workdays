@@ -3,6 +3,8 @@
 namespace Petaak\Workdays\Tests;
 
 use DateTime;
+use Petaak\Workdays\HolidaysProvider\Cze;
+use Petaak\Workdays\HolidaysProvider\Svk;
 use Petaak\Workdays\WorkdaysUtil;
 use Tester\Assert;
 use Tester\TestCase;
@@ -294,6 +296,65 @@ class WorkdaysUtilTest extends TestCase
         $util->registerHolidaysProvider(new \Acme\Demo\HolidaysProvider\CustomHolidaysProvider(), 'DE');
         $util->setCountry('DE');
         Assert::false($util->isWorkday(new DateTime('2019-10-03')));
+    }
+
+    /**
+     * @dataProvider getTestFindWorkdaysByDateIntervalArgs
+     * @param string $dateFrom
+     * @param string $dateTo
+     * @param int $result
+     * @param string $countryCode
+     */
+    public function testFindWorkdaysByDateInterval($dateFrom, $dateTo, $result, $countryCode)
+    {
+        $util = new WorkdaysUtil();
+        $workDays = $util->findWorkdaysByDateInterval(new DateTime($dateFrom), new DateTime($dateTo), $countryCode);
+        Assert::count($result, $workDays);
+    }
+
+    /**
+     * @return array
+     */
+    public function getTestFindWorkdaysByDateIntervalArgs()
+    {
+        return [
+            [
+                '2020-01-25',
+                '2020-01-24',
+                0,
+                Cze::PROVIDER_COUNTRY_CODE,
+            ],
+            [
+                '2020-12-24',
+                '2020-12-26',
+                0,
+                Cze::PROVIDER_COUNTRY_CODE,
+            ],
+            [
+                '2019-12-20',
+                '2020-01-10',
+                12,
+                Cze::PROVIDER_COUNTRY_CODE,
+            ],
+            [
+                '2020-01-25',
+                '2020-01-24',
+                0,
+                Svk::PROVIDER_COUNTRY_CODE,
+            ],
+            [
+                '2020-12-24',
+                '2020-12-26',
+                0,
+                Svk::PROVIDER_COUNTRY_CODE,
+            ],
+            [
+                '2019-12-20',
+                '2020-01-10',
+                11,
+                Svk::PROVIDER_COUNTRY_CODE,
+            ],
+        ];
     }
 }
 

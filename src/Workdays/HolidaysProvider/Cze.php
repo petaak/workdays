@@ -13,6 +13,8 @@ use Petaak\Workdays\Holiday;
 class Cze extends BaseHolidaysProvider implements IHolidaysProvider
 {
 
+    const PROVIDER_COUNTRY_CODE = 'CZE';
+
     /**
      *
      * @param int $year
