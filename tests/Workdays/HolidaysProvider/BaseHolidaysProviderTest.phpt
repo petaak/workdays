@@ -50,6 +50,16 @@ class BaseHolidaysProviderTest extends TestCase
             [2028, '2028-04-16'],
         ];
     }
+
+    public function testPhpEasterDate()
+    {
+        $provider = new HolidayProvider();
+        for ($year = 1970; $year < 2037; ++$year) {
+            $result = $provider->getEasterSundayTester($year);
+
+            Assert::equal($result->format('Y-m-d'), date('Y-m-d', easter_date($year)));
+        }
+    }
 }
 
 $test = new BaseHolidaysProviderTest();
