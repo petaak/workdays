@@ -1,10 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 
 require __DIR__ . '/../vendor/autoload.php';
 
-if (!class_exists('Tester\Assert')) {
-    echo 'Install Nette Tester using `composer update --dev`' . PHP_EOL;
-    exit(1);
-}
+date_default_timezone_set('Europe/Prague');
 
 Tester\Environment::setup();

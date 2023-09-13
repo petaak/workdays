@@ -1,0 +1,28 @@
+parameters:
+	level: max
+	paths:
+		- src
+		- tests
+	ignoreErrors:
+		-
+			message: "#^Parameter \\#1 \\$year of static method h4kuna\\\\DataType\\\\Date\\\\Easter\\:\\:friday\\(\\) expects int\\<1970, 2037\\>\\|null, int\\<2016, max\\> given\\.$#"
+			count: 1
+			path: src/HolidaysProvider/Cze.php
+
+		-
+			message: "#^Parameter \\#1 \\$year of static method h4kuna\\\\DataType\\\\Date\\\\Easter\\:\\:monday\\(\\) expects int\\<1970, 2037\\>\\|null, int given\\.$#"
+			count: 1
+			path: src/HolidaysProvider/Cze.php
+
+		-
+			message: "#^Parameter \\#1 \\$year of static method h4kuna\\\\DataType\\\\Date\\\\Easter\\:\\:friday\\(\\) expects int\\<1970, 2037\\>\\|null, int given\\.$#"
+			count: 1
+			path: src/HolidaysProvider/Svk.php
+
+		-
+			message: "#^Parameter \\#1 \\$year of static method h4kuna\\\\DataType\\\\Date\\\\Easter\\:\\:monday\\(\\) expects int\\<1970, 2037\\>\\|null, int given\\.$#"
+			count: 1
+			path: src/HolidaysProvider/Svk.php
+
+includes:
+	- vendor/phpstan/phpstan-strict-rules/rules.neon
