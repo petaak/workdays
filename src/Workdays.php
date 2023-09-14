@@ -12,7 +12,7 @@ use h4kuna\Workdays\Exceptions\InvalidStateException;
 use h4kuna\Workdays\HolidaysProvider\BaseProvider;
 use h4kuna\Workdays\HolidaysProvider\Holiday;
 
-class WorkdaysUtil
+class Workdays
 {
 	use MemoryStorage;
 
@@ -29,7 +29,15 @@ class WorkdaysUtil
 
 	public function isHoliday(DateTimeInterface $date): bool
 	{
-		return $this->holidayProvider->get($date) !== null;
+		$holiday = $this->holidayProvider->get($date);
+		return $holiday !== null && $holiday->vacation === false;
+	}
+
+
+	public function isVacation(DateTimeInterface $date): bool
+	{
+		$holiday = $this->holidayProvider->get($date);
+		return $holiday !== null && $holiday->vacation === true;
 	}
 
 
@@ -51,14 +59,9 @@ class WorkdaysUtil
 	public function nextHoliday(DateTime|DateTimeImmutable $date): Holiday
 	{
 		$copyDate = Convert::toMutable($date);
-		$limit = 366;
 		do {
-			$copyDate->modify('+1 day');
-			if (--$limit === 0) {
-				throw new InvalidStateException('No holiday in the following 366 days.');
-			}
-			$holiday = $this->holidayProvider->get($copyDate);
-		} while ($holiday === null);
+			$holiday = $this->holidayProvider->get($copyDate->modify('+1 day'));
+		} while ($holiday === null || $holiday->vacation === true);
 
 		return $holiday;
 	}

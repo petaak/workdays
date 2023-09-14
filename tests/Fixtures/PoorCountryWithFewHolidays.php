@@ -10,6 +10,10 @@ class PoorCountryWithFewHolidays extends HolidaysProvider\BaseProvider
 
 	protected function holidaysInYear(int $year): array
 	{
-		return [new HolidaysProvider\Holiday(new DateTimeImmutable($year . '-12-24'), 'Christmas')];
+		return [
+			new HolidaysProvider\Holiday(new DateTimeImmutable($year . '-12-24'), 'Christmas'),
+			new HolidaysProvider\Holiday(new DateTimeImmutable($year . '-12-23'), 'pre Christmas', true),
+			new HolidaysProvider\Holiday(new DateTimeImmutable($year . '-12-24'), 'Not save, because is vacation', true),
+		];
 	}
 }

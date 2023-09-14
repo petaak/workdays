@@ -5,7 +5,7 @@ namespace h4kuna\Workdays;
 use h4kuna\DataType\Collection\LazyBuilder;
 
 /**
- * @extends LazyBuilder<WorkdaysUtil>
+ * @extends LazyBuilder<Workdays>
  */
 final class Builder extends LazyBuilder
 {

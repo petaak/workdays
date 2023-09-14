@@ -11,8 +11,8 @@ final class Factory
 	public static function create(): Builder
 	{
 		return new Builder([
-			'cs_CZ' => static fn () => new WorkdaysUtil(new Cze()),
-			'sk_SK' => static fn () => new WorkdaysUtil(new Svk()),
+			'cs_CZ' => static fn () => new Workdays(new Cze()),
+			'sk_SK' => static fn () => new Workdays(new Svk()),
 		]);
 	}
 

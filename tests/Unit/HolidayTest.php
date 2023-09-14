@@ -22,6 +22,7 @@ class HolidayTest extends TestCase
 		$holiday = new Holiday($date, $name);
 		Assert::equal($date, $holiday->date);
 		Assert::equal($name, $holiday->name);
+		Assert::false($holiday->vacation);
 	}
 
 }

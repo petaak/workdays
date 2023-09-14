@@ -7,7 +7,11 @@ use DateTimeInterface;
 class Holiday
 {
 
-	public function __construct(public /* readonly */ DateTimeInterface $date, public /* readonly */ string $name)
+	public function __construct(
+		public /* readonly */ DateTimeInterface $date,
+		public /* readonly */ string $name,
+		public /* readonly */ bool $vacation = false
+	)
 	{
 	}
 

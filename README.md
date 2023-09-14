@@ -2,7 +2,7 @@ Usage
 -------------
 
 ```php
-$workdaysUtil = new \h4kuna\Workdays\WorkdaysUtil('CZE');
+$workdaysUtil = new \h4kuna\Workdays\Workdays('CZE');
 
 $datetime = new DateTime('2016-01-04 12:46:28');
 
@@ -68,7 +68,7 @@ class CustomHolidaysProvider implements \h4kuna\Workdays\HolidaysProvider
 }
 
 // initialize workdays util without country code; the correct holidays provider is not yet available
-$workdaysUtil = new \h4kuna\Workdays\WorkdaysUtil();
+$workdaysUtil = new \h4kuna\Workdays\Workdays();
 $workdaysUtil->registerHolidaysProvider(new CustomHolidaysProvider(), 'ZZ');
 // set the default country once the holidays provider is registered
 $workdaysUtil->setCountry('ZZ');

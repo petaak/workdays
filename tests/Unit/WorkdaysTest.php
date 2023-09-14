@@ -6,7 +6,7 @@ use DateTime;
 use DateTimeImmutable;
 use h4kuna;
 use h4kuna\Workdays\Factory;
-use h4kuna\Workdays\WorkdaysUtil;
+use h4kuna\Workdays\Workdays;
 use Tester\Assert;
 use Tester\TestCase;
 
@@ -15,7 +15,7 @@ require __DIR__ . '/../bootstrap.php';
 /**
  * @testCase
  */
-final class WorkdaysUtilTest extends TestCase
+final class WorkdaysTest extends TestCase
 {
 
 	/**
@@ -64,7 +64,7 @@ final class WorkdaysUtilTest extends TestCase
 	public function testGetNextHoliday(string $countryCode, string $dateString, string $nextHolidayDateString): void
 	{
 		$builder = Factory::create();
-		$builder->add('PoorCountryWithFewHolidays', new WorkdaysUtil(new h4kuna\Workdays\Tests\Fixtures\PoorCountryWithFewHolidays()));
+		$builder->add('PoorCountryWithFewHolidays', new Workdays(new h4kuna\Workdays\Tests\Fixtures\PoorCountryWithFewHolidays()));
 		$util = $builder->get($countryCode);
 
 		$nextHoliday = $util->nextHoliday(new DateTime($dateString));
@@ -72,9 +72,43 @@ final class WorkdaysUtilTest extends TestCase
 	}
 
 
+	/**
+	 * @return array<mixed>
+	 */
+	protected function provideVacation(): array
+	{
+		return [
+			['2023-12-22', false, false, new DateTimeImmutable('2023-12-24')],
+			['2023-12-23', false, true, new DateTimeImmutable('2023-12-24')],
+			['2023-12-24', true, false, new DateTimeImmutable('2024-12-24')],
+		];
+	}
+
+
+	/**
+	 * @dataProvider provideVacation
+	 */
+	public function testVacation(
+		string $dateString,
+		bool $isHoliday,
+		bool $isVacation,
+		DateTimeImmutable $nextHoliday
+	): void
+	{
+		$builder = Factory::create();
+		$builder->add('test', new Workdays(new h4kuna\Workdays\Tests\Fixtures\PoorCountryWithFewHolidays()));
+		$util = $builder->get('test');
+
+		$date = new DateTimeImmutable($dateString);
+		Assert::same($isHoliday, $util->isHoliday($date));
+		Assert::same($isVacation, $util->isVacation($date));
+		Assert::equal($nextHoliday, $util->nextHoliday($date)->date);
+	}
+
+
 	public function testAddWorkdays(): void
 	{
-		$util = new WorkdaysUtil(new h4kuna\Workdays\HolidaysProvider\Cze());
+		$util = new Workdays(new h4kuna\Workdays\HolidaysProvider\Cze());
 		$date = new DateTime('2015-12-23');
 		$date = $util->moveWorkdays($date, 1);
 		Assert::equal(new DateTime('2015-12-28'), $date);
@@ -89,19 +123,36 @@ final class WorkdaysUtilTest extends TestCase
 
 	public function testChooseCorrectProvider(): void
 	{
-		$util = new WorkdaysUtil(new h4kuna\Workdays\HolidaysProvider\Svk());
+		$util = new Workdays(new h4kuna\Workdays\HolidaysProvider\Svk());
 		$date = new DateTime('2016-09-28');
 		Assert::false($util->isHoliday($date));
 		Assert::true($util->isWorkday($date));
 	}
 
 
-	public function testGetNextHolidayThrowsException(): void
+	public function testEmptySourceThrowsException(): void
 	{
 		Assert::exception(function () {
-			$util = new WorkdaysUtil(new h4kuna\Workdays\Tests\Fixtures\PoorCountryWithNoHolidays());
+			$util = new Workdays(new h4kuna\Workdays\Tests\Fixtures\PoorCountryWithNoHolidays());
 			$util->nextHoliday(new DateTime());
-		}, h4kuna\Workdays\Exceptions\InvalidStateException::class, 'No holiday in the following 366 days.');
+		}, h4kuna\Workdays\Exceptions\InvalidStateException::class, 'For year "2023" there are no holidays.');
+	}
+
+
+	public function testDoesNotUseYearVariableThrowsException(): void
+	{
+		Assert::exception(function () {
+			$util = new Workdays(new class extends h4kuna\Workdays\HolidaysProvider\BaseProvider {
+				protected function holidaysInYear(int $year): array
+				{
+					return [
+						new h4kuna\Workdays\HolidaysProvider\Holiday(new DateTimeImmutable('2013-12-12'), 'Bad date'),
+					];
+				}
+
+			});
+			$util->nextHoliday(new DateTime());
+		}, h4kuna\Workdays\Exceptions\InvalidStateException::class, sprintf('You define bad year "2013-12-12" for require year "%s".', date('Y')));
 	}
 
 
@@ -243,5 +294,4 @@ final class WorkdaysUtilTest extends TestCase
 
 }
 
-$test = new WorkdaysUtilTest();
-$test->run();
+(new WorkdaysTest())->run();
