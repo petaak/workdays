@@ -40,7 +40,7 @@
   },
   "scripts": {
     "phpstan": "vendor/bin/phpstan analyse",
-    "tests": "vendor/bin/tester -s --colors 1 -s -C tests/Unit",
+    "tests": "vendor/bin/tester --colors 1 -s -C tests/Unit",
     "coverage": "vendor/bin/tester --coverage coverage.html --coverage-src src/ -s --colors 1 -s -C tests/Unit"
   }
 }
